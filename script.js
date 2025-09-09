@@ -37,30 +37,49 @@ navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
+        console.log('Navigation clicked:', targetId); // Debug log
         
-        if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+        // Special handling for home section (hero)
+        if (targetId === '#home') {
+            console.log('Scrolling to home (top of page)'); // Debug log
             window.scrollTo({
-                top: offsetTop,
+                top: 0,
                 behavior: 'smooth'
             });
+        } else {
+            const targetSection = document.querySelector(targetId);
+            if (targetSection) {
+                console.log('Scrolling to section:', targetId, 'at position:', targetSection.offsetTop); // Debug log
+                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            } else {
+                console.log('Target section not found:', targetId); // Debug log
+            }
         }
     });
 });
 
 // Active navigation link highlighting
-const sections = document.querySelectorAll('section');
+const sections = document.querySelectorAll('section, header.hero');
 const navLinksArray = Array.from(navLinks);
 
 window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute('id');
-        }
-    });
+    
+    // Check if we're at the top (home section)
+    if (window.scrollY < 100) {
+        current = 'home';
+    } else {
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+    }
 
     navLinksArray.forEach(link => {
         link.classList.remove('active');
@@ -289,12 +308,18 @@ const throttledScrollHandler = throttle(() => {
     
     // Active navigation highlighting
     let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute('id');
-        }
-    });
+    
+    // Check if we're at the top (home section)
+    if (window.scrollY < 100) {
+        current = 'home';
+    } else {
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+    }
 
     navLinksArray.forEach(link => {
         link.classList.remove('active');
