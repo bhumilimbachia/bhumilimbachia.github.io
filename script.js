@@ -37,21 +37,26 @@ navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
+        console.log('Navigation clicked:', targetId); // Debug log
         
-        if (targetSection) {
-            // Special handling for home section (hero)
-            if (targetId === '#home') {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            } else {
+        // Special handling for home section (hero)
+        if (targetId === '#home') {
+            console.log('Scrolling to home (top of page)'); // Debug log
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } else {
+            const targetSection = document.querySelector(targetId);
+            if (targetSection) {
+                console.log('Scrolling to section:', targetId, 'at position:', targetSection.offsetTop); // Debug log
                 const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
                 });
+            } else {
+                console.log('Target section not found:', targetId); // Debug log
             }
         }
     });
