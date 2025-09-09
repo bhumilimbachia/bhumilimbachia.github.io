@@ -40,27 +40,41 @@ navLinks.forEach(link => {
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+            // Special handling for home section (hero)
+            if (targetId === '#home') {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
         }
     });
 });
 
 // Active navigation link highlighting
-const sections = document.querySelectorAll('section');
+const sections = document.querySelectorAll('section, header.hero');
 const navLinksArray = Array.from(navLinks);
 
 window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute('id');
-        }
-    });
+    
+    // Check if we're at the top (home section)
+    if (window.scrollY < 100) {
+        current = 'home';
+    } else {
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+    }
 
     navLinksArray.forEach(link => {
         link.classList.remove('active');
@@ -289,12 +303,18 @@ const throttledScrollHandler = throttle(() => {
     
     // Active navigation highlighting
     let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute('id');
-        }
-    });
+    
+    // Check if we're at the top (home section)
+    if (window.scrollY < 100) {
+        current = 'home';
+    } else {
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+    }
 
     navLinksArray.forEach(link => {
         link.classList.remove('active');
